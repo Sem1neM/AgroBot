@@ -14,7 +14,7 @@ last_request_time = {}
 MAX_REQUESTS_PER_SECOND = 1
 
 # Пароль БД
-DB_PASSWORD = ""
+DB_PASSWORD = "cnjldflwfnbvbkkbvtnhjdsq"
 
 # Пользователь БД
 DB_USER = "root"

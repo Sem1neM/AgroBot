@@ -95,7 +95,7 @@ async def send_navigation_map(message: types.Message):
 
 
 # Команда info
-@router.message(Command("info"))
+@router.message(Command("about"))
 async def send_info(message: types.Message):
     await message.reply(INFO)
 
@@ -137,14 +137,18 @@ async def cancel_feedback_command(message: types.Message):
 # Обработчик для всех остальных сообщений
 @router.message(FeedbackState.WaitingForFeedback)
 async def handle_feedback_message(message: types.Message, state: FSMContext):
-    # Сохранение сообщения обратной связи в базе данных
-    Feedback(user_id=message.from_user.username, message=message.text, message_time=datetime.datetime.now()).save()
+    try:
+        # Сохранение сообщения обратной связи в базе данных
+        Feedback(user_id=message.from_user.username, message=message.text, message_time=datetime.datetime.now()).save()
+        # Подтверждение получения обратной связи пользователю
+        await message.answer(FEEDBACK_THANKS)
 
-    # Подтверждение получения обратной связи пользователю
-    await message.answer(FEEDBACK_THANKS)
+    except:
+        await message.answer(FEEDBACK_ERROR)
 
-    # Возвращение бота в начальное состояние
-    await state.clear()
+    finally:
+        # Возвращение бота в начальное состояние
+        await state.clear()
 
 
 # Обработчик для всех остальных сообщений
