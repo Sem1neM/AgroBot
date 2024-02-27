@@ -1,5 +1,5 @@
 # Токен бота
-API_TOKEN = '7061394238:AAEe1SmB_k_eK5wPYt91L3XLNiG_4moKqAw'
+API_TOKEN = ''
 
 # Путь к изображению дорожной карты
 navigation_map_path = "navigation_map.png"
@@ -14,7 +14,7 @@ last_request_time = {}
 MAX_REQUESTS_PER_SECOND = 1
 
 # Пароль БД
-DB_PASSWORD = "cnjldflwfnbvbkkbvtnhjdsq"
+DB_PASSWORD = ""
 
 # Пользователь БД
 DB_USER = "root"
