@@ -24,7 +24,8 @@ async def send_welcome(message: types.Message, state: FSMContext):
     await state.set_state(States.FIRST_CHOICE)
 
 
-# Обработка сообщений с цифрами (категории деятельности)
+# Обработка сообщений с цифрами (категории деятельности
+# TODO: Переделать дорожную карту, придумать алгоритм обработки подбора финансирования
 @router.message(States.FIRST_CHOICE)
 async def send_category_info(message: types.Message, state: FSMContext):
     # Проверяем выбранную команду
@@ -69,7 +70,8 @@ async def send_category_info(message: types.Message, state: FSMContext):
     # Обработчик выбора ответа
 
 
-@router.message(lambda message: message.text in ["Меньше года", "Больше года"], States.SECOND_CHOICE)
+# TODO: Переделать под дорожную карту
+@router.message(lambda message: message.text in DURATION_KB, States.SECOND_CHOICE)
 async def handle_choice(message: types.Message, state: FSMContext):
     if message.text == '/cancel':
         await state.clear()
@@ -112,8 +114,6 @@ async def request_feedback(message: types.Message, state: FSMContext):
     await message.reply(FEEDBACK)
     # Перевод бота в режим ожидания обратной связи
     await state.set_state(FeedbackState.WaitingForFeedback)
-
-    # Feedback(user_id=message.from_user.id, message=message.text).save()
 
 
 # Обработчик команды /cancel
