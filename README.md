@@ -1,4 +1,4 @@
-<h1>Никнейм бота в телеграмме @SamAgroInfoTest_bot</h1>
+<h1>Никнейм бота в телеграмме <a href = "https://t.me/SamAgroInfoTest_bot">@SamAgroInfoTest_bot</a></h1>
 <h2><a href = "http://www.agro-inform.ru/deyatelnost/gospodderzhka/">Ссылка на сайт с госфинансированиями</a></h2>
 <a href = "https://drive.google.com/file/d/19I5k-g7gkzF5_tyRKuea1x8xx5xMOf8w/view">Ссылка на доску в draw.io</a>
 <hr>
