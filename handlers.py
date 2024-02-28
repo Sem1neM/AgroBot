@@ -3,10 +3,10 @@ import time
 
 from aiogram import types, Router
 from aiogram.fsm.context import FSMContext
-from aiogram.types import FSInputFile
+from aiogram.types import FSInputFile, document
 from aiogram.filters import Command, StateFilter
 
-from config import last_request_time, MAX_REQUESTS_PER_SECOND, navigation_map_path
+from config import last_request_time, MAX_REQUESTS_PER_SECOND, navigation_map_path, DOCUMENT_PATH
 from kb import make_row_keyboard, make_column_keyboard
 from models.models import Feedback
 from states import States, FeedbackState
@@ -149,6 +149,11 @@ async def handle_feedback_message(message: types.Message, state: FSMContext):
     finally:
         # Возвращение бота в начальное состояние
         await state.clear()
+
+@router.message(Command("document"))
+async def document_command(message: types.Message):
+    doc = FSInputFile(DOCUMENT_PATH)
+    await message.reply_document(doc, caption=DOCUMENT)
 
 
 # Обработчик для всех остальных сообщений
