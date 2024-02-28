@@ -10,15 +10,18 @@ from texts import STARTUP, SHUTDOWN
 
 bot = Bot(token=API_TOKEN)
 
+
 # Обработчик события, выполняемого при запуске бота
 async def on_startup():
     # Отправляем уведомление о запуске бота в администраторский чат
     await bot.send_message(CHAT_ID, STARTUP)
 
+
 # Обработчик события, выполняемого при отключении бота
 async def on_shutdown():
     # Отправляем уведомление об остановке бота в администраторский чат
     await bot.send_message(CHAT_ID, SHUTDOWN)
+
 
 # Функция для запуска бота
 async def main():
