@@ -1,7 +1,7 @@
 import datetime
 import time
 
-from aiogram import types, Router
+from aiogram import types, Router, Bot
 from aiogram.fsm.context import FSMContext
 from aiogram.types import FSInputFile
 from aiogram.filters import Command, StateFilter
@@ -13,6 +13,8 @@ from states import States, FeedbackState
 from texts import *
 
 router = Router()
+
+bot = Bot(API_TOKEN)
 
 
 # Команда start
@@ -142,6 +144,8 @@ async def handle_feedback_message(message: types.Message, state: FSMContext):
         Feedback(user_id=message.from_user.username, message=message.text, message_time=datetime.datetime.now()).save()
         # Подтверждение получения обратной связи пользователю
         await message.answer(FEEDBACK_THANKS)
+        await bot.send_message(ADMIN_ID, FEEDBACK_FROM_ADMIN.format(message.from_user.username, message.text,
+                                                                    datetime.datetime.now()))
 
     except Exception as e:
         print(e)
