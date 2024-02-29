@@ -3,10 +3,10 @@ import time
 
 from aiogram import types, Router
 from aiogram.fsm.context import FSMContext
-from aiogram.types import FSInputFile, document
+from aiogram.types import FSInputFile
 from aiogram.filters import Command, StateFilter
 
-from config import last_request_time, MAX_REQUESTS_PER_SECOND, navigation_map_path, DOCUMENT_PATH
+from config import *
 from kb import make_row_keyboard, make_column_keyboard
 from models.models import Feedback
 from states import States, FeedbackState
@@ -29,9 +29,9 @@ async def send_welcome(message: types.Message, state: FSMContext):
 @router.message(States.FIRST_CHOICE)
 async def send_category_info(message: types.Message, state: FSMContext):
     # Проверяем выбранную команду
-    if message.text == '/cancel':
-        await state.clear()
-        await message.reply(CANCEL, reply_markup=types.ReplyKeyboardRemove())
+    if await click_cancel(message, state):
+        return
+    if await click_help(message, state):
         return
     category = message.text
 
@@ -73,9 +73,9 @@ async def send_category_info(message: types.Message, state: FSMContext):
 # TODO: Переделать под дорожную карту
 @router.message(lambda message: message.text in DURATION_KB, States.SECOND_CHOICE)
 async def handle_choice(message: types.Message, state: FSMContext):
-    if message.text == '/cancel':
-        await state.clear()
-        await message.reply(CANCEL, reply_markup=types.ReplyKeyboardRemove())
+    if await click_cancel(message, state):
+        return
+    if await click_help(message, state):
         return
     # Отправляем сообщение с выбранным вариантом ответа
     await message.answer(f"Вы выбрали: {message.text}", reply_markup=types.ReplyKeyboardRemove())
@@ -99,7 +99,7 @@ async def send_navigation_map(message: types.Message):
 # Команда info
 @router.message(Command("about"))
 async def send_info(message: types.Message):
-    await message.reply(INFO)
+    await message.reply(ABOUT)
 
 
 # Команда contact
@@ -143,12 +143,14 @@ async def handle_feedback_message(message: types.Message, state: FSMContext):
         # Подтверждение получения обратной связи пользователю
         await message.answer(FEEDBACK_THANKS)
 
-    except:
+    except Exception as e:
+        print(e)
         await message.answer(FEEDBACK_ERROR)
 
     finally:
         # Возвращение бота в начальное состояние
         await state.clear()
+
 
 @router.message(Command("document"))
 async def document_command(message: types.Message):
@@ -173,3 +175,19 @@ async def handle_unknown(message: types.Message):
 
     # Обновляем время последнего запроса от пользователя
     last_request_time[user_id] = current_time
+
+
+async def click_cancel(message, state):
+    if message.text == '/cancel':
+        await state.clear()
+        await message.reply(CANCEL, reply_markup=types.ReplyKeyboardRemove())
+        return True
+    return False
+
+
+async def click_help(message, state):
+    if message.text == '/help':
+        await state.clear()
+        await message.reply(COMMANDS, reply_markup=types.ReplyKeyboardRemove())
+        return True
+    return False
